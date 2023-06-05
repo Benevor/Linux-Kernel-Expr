@@ -29,7 +29,17 @@ gcc test.c -o test
 ./test
 ```
 
-写在`kernel/sys.c`中的代码
+值得注意的是进行亿级别的四则运算是重复的等幂运算，在编译时如果优化等级高的话会优化掉多余的计算，所以上述过程中，内核态和用户态的时间差别过大。（内核态默认优化等级高）
+
+当我们在编译用户态代码的时候，如果手动提高优化等级，则可以缩小两者的差距，使之处于同一数量级
+
+```bash
+gcc test.c -o test -O3
+./test
+```
+
+`kernel/sys.c`中的代码
+
 ```C
 //my func
 long xiaoxiao_oper(int* result,int num1,int num2,char* op)

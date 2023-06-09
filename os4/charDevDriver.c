@@ -24,11 +24,13 @@ static struct device *CharMsgDriverDevice = NULL;
 int DeviceOpenNumbers = 0;
 char DeviceData[DEVICE_DATA_SIZE];
 
-static int __init CharMsgDriverInit(void) {
+static int __init CharMsgDriverInit(void)
+{
   MajorNumber = register_chrdev(
       0, DEVICE_NAME,
       &fops); // Linux内核中用于注册字符设备驱动程序的函数.参数1：传递0，则表示由内核自动分配主设备号。参数3：驱动程序的回调函数，用于处理设备的操作。
-  if (MajorNumber < 0) {
+  if (MajorNumber < 0)
+  {
     printk(KERN_ALERT "Failed to register a major number.\n");
     return MajorNumber;
   }
@@ -38,7 +40,8 @@ static int __init CharMsgDriverInit(void) {
   // 这样，加载模块的时候，用户空间中的udev会自动响应device_create(…)函数，去/sysfs下寻找对应的类从而创建设备节点。
 
   CharMsgDriverClass = class_create(THIS_MODULE, CLASS_NAME);
-  if (IS_ERR(CharMsgDriverClass)) {
+  if (IS_ERR(CharMsgDriverClass))
+  {
     unregister_chrdev(MajorNumber, DEVICE_NAME);
     printk(KERN_ALERT "Failed to create device class.\n");
     return PTR_ERR(CharMsgDriverClass);
@@ -46,7 +49,8 @@ static int __init CharMsgDriverInit(void) {
 
   CharMsgDriverDevice = device_create(CharMsgDriverClass, NULL,
                                       MKDEV(MajorNumber, 0), NULL, DEVICE_NAME);
-  if (IS_ERR(CharMsgDriverDevice)) {
+  if (IS_ERR(CharMsgDriverDevice))
+  {
     class_destroy(CharMsgDriverClass);
     unregister_chrdev(MajorNumber, DEVICE_NAME);
     printk(KERN_ALERT "Failed to create the device.\n");
@@ -57,7 +61,8 @@ static int __init CharMsgDriverInit(void) {
   return 0;
 }
 
-static void __exit CharMsgDriverExit(void) {
+static void __exit CharMsgDriverExit(void)
+{
   device_destroy(CharMsgDriverClass, MKDEV(MajorNumber, 0));
   class_unregister(CharMsgDriverClass);
   class_destroy(CharMsgDriverClass);

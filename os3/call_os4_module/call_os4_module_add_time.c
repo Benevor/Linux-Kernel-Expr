@@ -10,29 +10,34 @@ extern int (*fptr_Operation)(int *, int, int, char *);
 
 struct timeval tstart, tend;
 
-static int call_os4_module_init(void) {
+static int call_os4_module_init(void)
+{
   printk("call_os4_module_init...\n");
 
   do_gettimeofday(&tstart);
   int count = 1000000000;
   int result;
   int i;
-  for (i = 0; i < count; i++) {
+  for (i = 0; i < count; i++)
+  {
     char op_add = '+';
     fptr_Operation(&result, 10, 10, &op_add);
   }
 
-  for (i = 0; i < count; i++) {
+  for (i = 0; i < count; i++)
+  {
     char op_sub = '-';
     fptr_Operation(&result, 20, 10, &op_sub);
   }
 
-  for (i = 0; i < count; i++) {
+  for (i = 0; i < count; i++)
+  {
     char op_mul = '*';
     fptr_Operation(&result, 10, 10, &op_mul);
   }
 
-  for (i = 0; i < count; i++) {
+  for (i = 0; i < count; i++)
+  {
     char op_div = '\\';
     fptr_Operation(&result, 20, 10, &op_div);
   }
@@ -43,7 +48,8 @@ static int call_os4_module_init(void) {
   return 0;
 }
 
-static void call_os4_module_exit(void) {
+static void call_os4_module_exit(void)
+{
   printk("call_os4_module_exit...\n");
   return;
 }

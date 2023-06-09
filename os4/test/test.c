@@ -8,14 +8,16 @@
 static char msgBuffer[BUFFER_LENGTH];
 
 // 就像读写文件一样，读写设备
-int main() {
+int main()
+{
   int ret, fd;
   char toSend[BUFFER_LENGTH] = {0};
   printf("\n");
 
   // 1. 打开设备 0
   fd = open("/dev/charMsgDriver", O_RDWR);
-  if (fd < 0) {
+  if (fd < 0)
+  {
     perror("failed to open /dev/charMsgDriver device.\n");
     return -1;
   }
@@ -27,7 +29,8 @@ int main() {
 
   // 2. 向设备中写入数据
   ret = write(fd, toSend, strlen(toSend));
-  if (ret < 0) {
+  if (ret < 0)
+  {
     perror("failed to write the message\n");
     return -1;
   }
@@ -38,7 +41,8 @@ int main() {
 
   printf("read from the device.\n");
   ret = read(fd, msgBuffer, strlen(toSend));
-  if (ret < 0) {
+  if (ret < 0)
+  {
     perror("failed to read message from the device.\n");
     return -1;
   }

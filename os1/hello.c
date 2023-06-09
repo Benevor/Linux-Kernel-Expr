@@ -7,20 +7,23 @@ int num = 1;
 char *name = "jiboliu";
 
 // 声明节点结构
-typedef struct node {
+typedef struct node
+{
   struct node *next; // 指向直接后继元素的指针
   int elem;          // 存储整形元素
 } link;
 
 // 创建链表的函数
-link *initLink(void) {
+link *initLink(void)
+{
   link *p = (link *)kmalloc(
       sizeof(link),
       GFP_KERNEL); // 创建一个头指针（不包含实际值）（就是个空结点）
-  link *temp = p; // 声明一个指针指向头结点，用于遍历链表
+  link *temp = p;  // 声明一个指针指向头结点，用于遍历链表
   // 生成链表
   int i = 1;
-  for (; i <= 5; i++) {
+  for (; i <= 5; i++)
+  {
     // 创建节点并初始化
     link *a = (link *)kmalloc(sizeof(link), GFP_KERNEL);
     a->elem = i;
@@ -33,13 +36,16 @@ link *initLink(void) {
 }
 
 // p为原链表的头指针，elem表示新数据元素，add表示新元素要插入的位置（第 add 个）
-link *insertElem(link *p, int elem, int add) {
+link *insertElem(link *p, int elem, int add)
+{
   link *temp = p; // 创建临时指针temp（移动指针）
   // 首先找到要插入位置的上一个结点
   int i = 1;
-  for (; i < add; i++) {
+  for (; i < add; i++)
+  {
     temp = temp->next;
-    if (temp == NULL) {
+    if (temp == NULL)
+    {
       printk(KERN_WARNING "插入位置无效\n");
       return p;
     }
@@ -54,32 +60,38 @@ link *insertElem(link *p, int elem, int add) {
 }
 
 // p为原链表的头指针，add为要删除元素的位置
-link *delElem(link *p, int add) {
+link *delElem(link *p, int add)
+{
   link *temp = p;
   // 遍历到被删除结点的上一个结点
   int i = 1;
-  for (; i < add; i++) {
+  for (; i < add; i++)
+  {
     temp = temp->next;
-    if (temp->next == NULL) {
+    if (temp->next == NULL)
+    {
       printk(KERN_WARNING "没有该结点\n");
       return p;
     }
   }
-  link *del = temp->next; // 单独设置一个指针指向被删除结点，以防丢失
+  link *del = temp->next;        // 单独设置一个指针指向被删除结点，以防丢失
   temp->next = temp->next->next; // 删除某个结点的方法就是更改前一个结点的指针域
-  kfree(del); // 手动释放该结点，防止内存泄漏
+  kfree(del);                    // 手动释放该结点，防止内存泄漏
   return p;
 }
 
 // p为原链表，elem表示被查找元素、返回待查找元素的位置
-int selectElem(link *p, int elem) {
+int selectElem(link *p, int elem)
+{
   // 新建一个指针t，初始化为头指针 p
   link *t = p;
   int i = 1;
   // 由于头节点的存在，因此while中的判断为t->next
-  while (t->next) {
+  while (t->next)
+  {
     t = t->next;
-    if (t->elem == elem) {
+    if (t->elem == elem)
+    {
       return i;
     }
     i++;
@@ -89,22 +101,26 @@ int selectElem(link *p, int elem) {
 }
 
 // 更新函数，其中，add 表示更改结点在链表中的位置，newElem 为新的数据域的值
-link *updateElem(link *p, int add, int newElem) {
+link *updateElem(link *p, int add, int newElem)
+{
   link *temp = p;
   temp = temp->next; // 在遍历之前，temp指向首元结点
   // 遍历到待更新结点
   int i = 1;
-  for (; i < add; i++) {
+  for (; i < add; i++)
+  {
     temp = temp->next;
   }
   temp->elem = newElem;
   return p;
 }
 
-void display(link *p) {
+void display(link *p)
+{
   link *temp = p; // 将temp指针重新指向头结点
   // 只要temp指针指向的结点的next不是Null，就执行输出语句。
-  while (temp->next) {
+  while (temp->next)
+  {
     temp = temp->next;
     printk(KERN_INFO "%d ", temp->elem);
   }
@@ -117,7 +133,8 @@ static int hello_init(void) // static使得该文件以外无法访问
   // 只能使用内核里定义好的C函数，printk会根据日志级别将指定信息输出到控制台或日志文件中，
   // KERN_ALERT会输出到控制台
   int i = 0;
-  for (; i < num; i++) {
+  for (; i < num; i++)
+  {
     // 注意printk和C语言中printf的区别
     printk(KERN_INFO "hello,%s\n", name);
   }
@@ -137,9 +154,12 @@ static int hello_init(void) // static使得该文件以外无法访问
 
   printk(KERN_INFO "查找元素2的位置为:\n");
   int address = selectElem(p, 2);
-  if (address == -1) {
+  if (address == -1)
+  {
     printk(KERN_INFO "没有该元素");
-  } else {
+  }
+  else
+  {
     printk(KERN_INFO "元素2的位置为:%d\n", address);
   }
 
